@@ -4,13 +4,15 @@
 <h1>All Cars</h1>
 
 {% for car in cars %}
-  <div>
-    <p>Brand: {{ car.brand }}</p>
-    <p>Model: {{ car.model }}</p>
-    <p>Year: {{ car.year }}</p>
-    <p>Price Per Day: ${{ car.price_per_day }}</p>
-    <p>Description: {{ car.description }}</p>
-  </div>
+  <a href="{% url 'detail' car.id %}">
+    <div>
+        <p>Brand: {{ car.brand }}</p>
+        <p>Model: {{ car.model }}</p>
+        <p>Year: {{ car.year }}</p>
+        <p>Price Per Day: ${{ car.price_per_day }}</p>
+        <p>Description: {{ car.description }}</p>
+    </div>
+  </a>
 {% endfor %}
 
 {% endblock %}
