@@ -14,9 +14,10 @@ class Car(models.Model):
 
     def __str__(self):
         return f'{self.brand} {self.model} {self.year} ${self.price_per_day}'
-    
+
+
 class Booking(models.Model):
-    trip_start = models.DateField()
+    trip_start = models.DateField('Booking Date')
     trip_end = models.DateField()
     # booking_num = random.randint(111111111, 999999999)
     booking_number = models.AutoField(primary_key=True)

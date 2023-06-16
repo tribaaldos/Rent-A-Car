@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <h1> Car Details</h1>
 
 <div>
@@ -9,4 +10,25 @@
     <p>Price Per Day: ${{ car.price_per_day }}</p>
     <p>Description: {{ car.description }}</p>
 </div>
+
+<div class="col s6">
+    <form action="{% url 'add_booking' car.id %}" method="POST">
+        {% csrf_token %}
+          <!-- Render the inputs -->
+        {{ booking_form.as_p }}
+        <input type="submit" class="btn" value="Book!">
+    </form>
+</div>
+
+<script>
+    const dateEl = document.getElementById('id_date');
+    // M is Materialize's global variable
+    M.Datepicker.init(dateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+</script>
+
 {% endblock %}
