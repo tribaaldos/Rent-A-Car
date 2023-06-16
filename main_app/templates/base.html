@@ -13,19 +13,22 @@
     <header class=""> 
         <ul id="dropdown1" class="dropdown-content">
             <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="">Logout</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
             <li class="divider"></li>
-            <li><a href="">Log in</a></li>
-            <li><a href="">Sign Up</a></li>        
+            <li><a href="{% url 'login' %}">Log In</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>      
         </ul>
         <nav>
             <div class="nav-wrapper">
                 <a href="{% url 'home' %}" class="brand-logo">Home</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="">Logout</a></li>
-                    <li><a href="">Log in</a></li>
-                    <li><a href="">Sign Up</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
                     <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Log In</a></li>
+                    <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                {% endif %}
                 </ul>
             </div>
         </nav>
