@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .models import Car
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+from .models import Car, Booking
+from .forms import BookingForm
 
 # Create your views here.
 
@@ -14,9 +18,29 @@ def cars_index(request):
     cars = Car.objects.all()
     return render(request, 'cars/index.html', {'cars': cars})
 
+
 def cars_detail(request, car_id):
     car = Car.objects.get(id=car_id)
-    return render(request, 'cars/detail.html', {'car': car})
+
+    booking_form = BookingForm()
+
+    return render(request, 'cars/detail.html', {
+        'car': car, 'booking_form': booking_form
+    })
+
+
+def add_booking(request, car_id):
+    form = BookingForm(request.POST)
+    if form.is_valid():
+        # We want a model instance, but
+        # we can't save to the db yet
+        # because we have not assigned the
+        # cat_id FK.
+        new_booking = form.save(commit=False)
+        new_booking.car_id = car_id
+        new_booking.save()
+    return redirect('detail', car_id=car_id)
+
 
 def signup(request):
     error_message = ''
