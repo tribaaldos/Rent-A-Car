@@ -37,6 +37,7 @@ def add_booking(request, car_id):
         # because we have not assigned the
         # cat_id FK.
         new_booking = form.save(commit=False)
+        new_booking.user = request.user
         new_booking.car_id = car_id
         new_booking.save()
     return redirect('detail', car_id=car_id)
