@@ -18,6 +18,10 @@ def cars_index(request):
     cars = Car.objects.all()
     return render(request, 'cars/index.html', {'cars': cars})
 
+def bookings_index(request):
+    bookings = Booking.objects.all()
+    return render(request, 'bookings/index.html', {'bookings': bookings})
+
 
 def cars_detail(request, car_id):
     car = Car.objects.get(id=car_id)

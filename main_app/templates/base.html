@@ -24,6 +24,7 @@
                 <a href="{% url 'home' %}" class="brand-logo">Home</a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="{% url 'all_cars' %}">Cars</a></li>
+                    <li><a href="{% url 'all_bookings' %}">Bookings</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                     <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
