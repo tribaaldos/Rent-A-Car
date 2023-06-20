@@ -4,12 +4,11 @@
 <h1>My Bookings</h1>
 
 {% for booking in bookings %}
-
     <div>
         <p>User: {{ booking.user }}</p>
         <p>Start Date: {{ booking.trip_start }}</p>
         <p>End Date: {{ booking.trip_end }}</p>
-        <p>Car: {{ car.model }} </p>
+        <p>Car: {{ booking.car.model }} </p>
     </div>
   </a>
 {% endfor %}

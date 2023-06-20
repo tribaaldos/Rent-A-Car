@@ -5,8 +5,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('accounts/signup/', views.signup, name='signup'),
     path('cars/', views.cars_index, name='all_cars'),
-    path('bookings/<int:car_id>/', views.bookings_index, name='all_bookings'),
+    path('bookings/', views.bookings_index, name='all_bookings'),
     path('cars/<int:car_id>/', views.cars_detail, name='detail'),
-    path('cars/<int:car_id>/add_booking/',views.add_booking, name='add_booking'),
+    path('cars/<int:car_id>/add_booking/',
+         views.add_booking, name='add_booking'),
 
 ]
