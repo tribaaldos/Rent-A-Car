@@ -21,9 +21,16 @@
 </div>
 
 <script>
-    const dateEl = document.getElementById('id_date');
+    const startDateEl = document.getElementById('id_trip_start');
+    const endDateEl = document.getElementById('id_trip_end');
     // M is Materialize's global variable
-    M.Datepicker.init(dateEl, {
+    M.Datepicker.init(startDateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+    M.Datepicker.init(endDateEl, {
         format: 'yyyy-mm-dd',
         defaultDate: new Date(),
         setDefaultDate: true,
