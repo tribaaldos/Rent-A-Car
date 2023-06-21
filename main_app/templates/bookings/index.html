@@ -3,17 +3,32 @@
 
 <h1>My Bookings</h1>
 
-{% for booking in bookings %}
-    <div>
-        <p>User: {{ booking.user }}</p>
-        <p>Start Date: {{ booking.trip_start }}</p>
-        <p>End Date: {{ booking.trip_end }}</p>
-        <p>Car: {{ booking.car.model }} </p>
-        <div>
-          <a href="{% url 'edit_booking' booking.booking_number %}"> Edit </a>
-          <a href="{% url 'cancel_booking' booking.booking_number %}">Delete</a>
-        </div>
-    </div>
+{% if current_bookings %}
+<h4>Current Booking</h4>
+{% for current_booking in current_bookings %}
+<div>
+  <p>User: {{ current_booking.user }}</p>
+  <p>Start Date: {{ current_booking.trip_start }}</p>
+  <p>End Date: {{ current_booking.trip_end }}</p>
+  <p>Car: {{ current_booking.car.model }} </p>
+  <div>
+    <a href="{% url 'edit_booking' current_booking.booking_number %}"> Edit </a>
+    <a href="{% url 'cancel_booking' current_booking.booking_number %}">Delete</a>
+  </div>
+</div>
 {% endfor %}
+{% endif %}
+
+{% if past_bookings %}
+  <h4>Booking History</h4>
+  {% for past_booking in past_bookings %}
+  <div>
+    <p>User: {{ past_booking.user }}</p>
+    <p>Start Date: {{ past_booking.trip_start }}</p>
+    <p>End Date: {{ past_booking.trip_end }}</p>
+    <p>Car: {{ past_booking.car.model }} </p>
+  </div>
+  {% endfor %}
+{% endif %}
 
 {% endblock %}
