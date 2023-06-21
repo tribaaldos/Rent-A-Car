@@ -17,9 +17,7 @@
         {{ booking_form.as_p }}
         <input type="submit" class="btn" value="Book!">
     </form>
-    {% if not is_valid_date %}
-        <p>Invalid Date!</p>
-    {% endif %}
+    <p>{{ error_msg }}</p>
 </div>
 
 
