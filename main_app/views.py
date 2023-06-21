@@ -53,25 +53,32 @@ def add_booking(request, car_id):
     booking_form = BookingForm()
     form = BookingForm(request.POST)
     date_format = '%Y-%m-%d'
+    start_date = request.POST['trip_start']
+    end_date = request.POST['trip_end']
+    is_booked = not not car.booking_set.filter(
+        trip_start__lte=end_date, trip_end__gte=start_date)
+
     # We can't choose past dates
-    if datetime.strptime(request.POST['trip_start'], date_format).date() < date.today() or datetime.strptime(request.POST['trip_end'], date_format).date() < date.today():
-        return render(request, 'cars/detail.html',
-                      {'car': car, 'booking_form': booking_form, 'is_valid_date': False})
     # End date can't be before the start date
-    if datetime.strptime(request.POST['trip_start'], date_format) > datetime.strptime(request.POST['trip_end'], date_format):
-        return render(request, 'cars/detail.html',
-                      {'car': car, 'booking_form': booking_form, 'is_valid_date': False})
     # if someone already booked the date, you can't book that date
-    if form.is_valid():
-        # We want a model instance, but
-        # we can't save to the db yet
-        # because we have not assigned the
-        # cat_id FK.
-        new_booking = form.save(commit=False)
-        new_booking.user = request.user
-        new_booking.car_id = car_id
-        new_booking.save()
-    return redirect('all_bookings')
+    if is_booked:
+        error_msg = 'Already Booked'
+    elif datetime.strptime(start_date, date_format).date() < date.today() or datetime.strptime(end_date, date_format).date() < date.today() or datetime.strptime(start_date, date_format) > datetime.strptime(end_date, date_format):
+        error_msg = 'Invalid Date'
+    else:
+        if form.is_valid():
+            # We want a model instance, but
+            # we can't save to the db yet
+            # because we have not assigned the
+            # cat_id FK.
+            new_booking = form.save(commit=False)
+            new_booking.user = request.user
+            new_booking.car_id = car_id
+            new_booking.save()
+        return redirect('all_bookings')
+
+    return render(request, 'cars/detail.html',
+                  {'car': car, 'booking_form': booking_form, 'error_msg': error_msg})
 
 
 class BookingUpdate(UpdateView):
