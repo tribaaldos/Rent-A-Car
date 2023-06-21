@@ -6,9 +6,10 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import DeleteView, UpdateView
 from .models import Car, Booking, Photo
 from .forms import BookingForm
+from datetime import date
 
 # Create your views here.
 
@@ -24,7 +25,17 @@ def cars_index(request):
 
 def bookings_index(request):
     bookings = Booking.objects.filter(user=request.user)
-    return render(request, 'bookings/index.html', {'bookings': bookings})
+    past_bookings = []
+    current_bookings = []
+    for booking in bookings:
+        if booking.trip_end < date.today():
+            past_bookings.append(booking)
+        else:
+            current_bookings.append(booking)
+    return render(request, 'bookings/index.html', {
+        'past_bookings': past_bookings,
+        'current_bookings': current_bookings,
+    })
 
 
 def cars_detail(request, car_id):
@@ -50,6 +61,7 @@ def add_booking(request, car_id):
         new_booking.save()
     return redirect('all_bookings')
 
+
 class BookingUpdate(UpdateView):
     model = Booking
     fields = ['trip_start', 'trip_end']
@@ -59,11 +71,13 @@ class BookingDelete (DeleteView):
     model = Booking
     success_url = '/bookings'
 
+
 def add_photo(request, car_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
         s3 = boto3.client('s3')
-        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        key = uuid.uuid4().hex[:6] + \
+            photo_file.name[photo_file.name.rfind('.'):]
         try:
             bucket = os.environ['S3_BUCKET']
             s3.upload_fileobj(photo_file, bucket, key)
@@ -73,6 +87,7 @@ def add_photo(request, car_id):
             print('An error occurred uploading file to S3')
             print(e)
     return redirect('all_cars', car_id=car_id)
+
 
 def signup(request):
     error_message = ''
