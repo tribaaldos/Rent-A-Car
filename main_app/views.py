@@ -3,7 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from .models import Car, Booking
 from .forms import BookingForm
 
@@ -47,6 +47,9 @@ def add_booking(request, car_id):
         new_booking.save()
     return redirect('all_bookings')
 
+class BookingDelete (DeleteView):
+    model = Booking
+    success_url = '/bookings'
 
 def signup(request):
     error_message = ''
