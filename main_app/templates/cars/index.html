@@ -10,18 +10,22 @@
     <div class="card">
       <div class="card-image">
       <a href="{% url 'detail' car.id %}">
-        <img src="images/sample-1.jpg">
-      </div>
+        <form action="{% url 'add_photo' car.id %}" enctype="multipart/form-data" method="POST" >
+          {% csrf_token %}
+          <input type="file" name="photo-file">
+          <br><br>
+        </div>
         <span class="card-title">Click to book</span>
         <div class="card-content">
           <p>Brand: {{ car.brand }}</p>
           <p>Model: {{ car.model }}</p>
           <p>Year: {{ car.year }}</p>
           <p>Price Per Day: ${{ car.price_per_day }}</p>
-          <p>id: {{ car.id }}</p>
         </div>
       </a>
-      </div>
+      <button type="submit" class="btn">Upload Photo</button>
+    </form>
+    </div>
     </div>
   </div>
 </div>
