@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>My Bookings bro</h1>
+<h1>My Bookings</h1>
 
 {% for booking in bookings %}
     <div>
@@ -10,7 +10,8 @@
         <p>End Date: {{ booking.trip_end }}</p>
         <p>Car: {{ booking.car.model }} </p>
         <div>
-            <a href="{% url 'cancel_booking' booking.booking_number %}">Delete</a>
+          <a href="{% url 'edit_booking' booking.booking_number %}"> Edit </a>
+          <a href="{% url 'cancel_booking' booking.booking_number %}">Delete</a>
         </div>
     </div>
 {% endfor %}
