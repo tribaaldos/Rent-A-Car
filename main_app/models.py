@@ -37,6 +37,7 @@ class Booking(models.Model):
     def get_absolute_url(self):
         return reverse('all_bookings', )
     
+    
 class Photo(models.Model):
     url = models.CharField(max_length=200)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
