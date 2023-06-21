@@ -72,7 +72,7 @@ def add_photo(request, car_id):
         except Exception as e:
             print('An error occurred uploading file to S3')
             print(e)
-    return redirect('all_cars', car_id=car_id)
+    return redirect('all_cars',)
 
 def signup(request):
     error_message = ''
