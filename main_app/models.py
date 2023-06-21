@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import random
 from django.contrib.auth.models import User
 
@@ -32,3 +33,10 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.trip_start}-{self.trip_end} #booking {self.booking_number}"
+
+    def get_absolute_url(self):
+        return reverse('all_bookings', )
+    
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
