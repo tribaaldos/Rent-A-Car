@@ -22,12 +22,12 @@
 {% if past_bookings %}
   <h4>Booking History</h4>
   {% for past_booking in past_bookings %}
-  <div class="booking-card">
-    <p>User: {{ past_booking.user }}</p>
-    <p>Start Date: {{ past_booking.trip_start }}</p>
-    <p>End Date: {{ past_booking.trip_end }}</p>
-    <p>Car: {{ past_booking.car.model }} </p>
-  </div>
+    <div class="booking-card">
+      <p>User: {{ past_booking.user }}</p>
+      <p>Start Date: {{ past_booking.trip_start }}</p>
+      <p>End Date: {{ past_booking.trip_end }}</p>
+      <p>Car: {{ past_booking.car.model }} </p>
+    </div>
   {% endfor %}
 {% endif %}
 

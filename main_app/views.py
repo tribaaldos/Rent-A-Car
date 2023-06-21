@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import DeleteView, UpdateView
 from .models import Car, Booking, Photo
 from .forms import BookingForm
-from datetime import date
+from datetime import date, datetime
 
 # Create your views here.
 
@@ -44,12 +44,24 @@ def cars_detail(request, car_id):
     booking_form = BookingForm()
 
     return render(request, 'cars/detail.html', {
-        'car': car, 'booking_form': booking_form
+        'car': car, 'booking_form': booking_form, 'is_valid_date': True
     })
 
 
 def add_booking(request, car_id):
+    car = Car.objects.get(id=car_id)
+    booking_form = BookingForm()
     form = BookingForm(request.POST)
+    date_format = '%Y-%m-%d'
+    # We can't choose past dates
+    if datetime.strptime(request.POST['trip_start'], date_format).date() < date.today() or datetime.strptime(request.POST['trip_end'], date_format).date() < date.today():
+        return render(request, 'cars/detail.html',
+                      {'car': car, 'booking_form': booking_form, 'is_valid_date': False})
+    # End date can't be before the start date
+    if datetime.strptime(request.POST['trip_start'], date_format) > datetime.strptime(request.POST['trip_end'], date_format):
+        return render(request, 'cars/detail.html',
+                      {'car': car, 'booking_form': booking_form, 'is_valid_date': False})
+    # if someone already booked the date, you can't book that date
     if form.is_valid():
         # We want a model instance, but
         # we can't save to the db yet
