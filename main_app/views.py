@@ -81,7 +81,7 @@ def add_photo(request, car_id):
         try:
             bucket = os.environ['S3_BUCKET']
             s3.upload_fileobj(photo_file, bucket, key)
-            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+            url = f"{os.environ['S3_BASE_URL']}/{bucket}/{key}"
             Photo.objects.create(url=url, car_id=car_id)
         except Exception as e:
             print('An error occurred uploading file to S3')
@@ -100,7 +100,7 @@ def signup(request):
             user = form.save()
             # This is how we log a user in via code
             login(request, user)
-            return redirect('index')
+            return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
