@@ -8,12 +8,13 @@
     <title>Rent a Car</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 <body>
     <header class=""> 
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="{% url 'home' %}">Home</a></li>
+            <!-- <li><a href="{% url 'home' %}">Home</a></li> -->
             <li><a href="{% url 'logout' %}">Logout</a></li>
             <li class="divider"></li>
             <li><a href="{% url 'login' %}">Log In</a></li>
@@ -26,9 +27,9 @@
                     <li><a href="{% url 'all_cars' %}">Cars</a></li>
                     <li><a href="{% url 'all_bookings' %}">Bookings</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
-                {% else %}
+                    <!-- <li><a href="{% url 'logout' %}">Logout</a></li> -->
+                    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right"></i></a></li>
+                    {% else %}
                     <li><a href="{% url 'login' %}">Log In</a></li>
                     <li><a href="{% url 'signup' %}">Sign Up</a></li>
                 {% endif %}
@@ -39,8 +40,11 @@
     </header>
     {% block content %}
     {% endblock %}
- <script>
-    $(".dropdown-trigger").dropdown();
- </script>
+<script>
+    $(document).ready(function(){
+        $(".dropdown-trigger").dropdown();
+    });
+</script>
+
 </body>
 </html>
