@@ -58,13 +58,15 @@
         <option value=“5”>5 Stars</option>
       </select>
     </div>
-    <form action=“{% url ‘add_review’ car_id=car.id %}” method=“POST”>
-      {% csrf_token %}
-      {{ review_form.as_p }}
-      <input type=“hidden” name=“car_id” value=“{{ car.id }}“>
-      <button type=“submit”>Submit Review</button>
-    </form>
-</div>
+   
+    <div>
+      <form action="{% url 'add_review' car_id=car.id %}" method="POST">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <input type="hidden" name="car_id" value="{{ car.id }}">
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
 <!-- Display Existing Reviews -->
 <div>
   <h2>Reviews</h2>
@@ -72,7 +74,7 @@
     {% for review in reviews %}
       <li>
         <p> {{ review.content }}</p>
-        <p>Rating: {{ review.rating }} :star:</p>
+        <p>Rating: {{ review.rating }}⭐ </p>
         <p>User: {{ review.user.username }}</p>
       </li>
     {% endfor %}
