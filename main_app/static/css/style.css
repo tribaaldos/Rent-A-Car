@@ -115,6 +115,10 @@ margin-right: 200px;
 
 .col {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: center;
+}
+
+img.responsive-img, video.responsive-video {
+  padding: 0;
 }
