@@ -1,49 +1,53 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Car Details</h1>
-
-
-{% for photo in car.photo_set.all %}
-    <img style="height: 300px;"class="responsive-img card-panel" src="{{photo.url}}">
-{% empty %}
-    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
-{% endfor %}
-
-<form action="{% url 'add_photo' car.id %}" enctype="multipart/form-data" method="POST" >
-    {% csrf_token %}
-    {% if request.user.is_superuser %}
-      <input type="file" name="photo-file">
-      <button type="submit" class="btn">Upload Photo</button>
-    {% endif %}
-    <br><br>
-</form>
-
-<div>
-    <p>Brand: {{ car.brand }}</p>
-    <p>Model: {{ car.model }}</p>
-    <p>Year: {{ car.year }}</p>
-    <p>Price Per Day: $<span id="price-per-day">{{ car.price_per_day }}</span></p>
-    <p>Description: {{ car.description }}</p>
-</div>
-
-<div class="col s6">
-    <form action="{% url 'add_booking' car.id %}" method="POST">
+<div class="fake-body">
+    <h1>Car Details</h1>
+    
+    <div class="detail-pic-container">
+        {% for photo in car.photo_set.all %}
+        <img style="height: 700px;"class="responsive-img card-panel" class="detail-pic" src="{{photo.url}}">
+        {% empty %}
+        <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        {% endfor %}
+    </div>
+    
+    <form action="{% url 'add_photo' car.id %}" enctype="multipart/form-data" method="POST" >
         {% csrf_token %}
-        <!-- Render the inputs -->
-        {{ booking_form.as_p }}
-        <input type="submit" class="btn" value="Book!">
+        {% if request.user.is_superuser %}
+        <input type="file" name="photo-file">
+        <button type="submit" class="btn">Upload Photo</button>
+        {% endif %}
+        <br><br>
     </form>
-    <button id="calculate">How Much?</button>
-    <p>{{ error_msg }}</p>
-    <p id="total_price"></p>
+    <div class="info-form-container">
+        <div class="car-info">
+            <p>Brand: {{ car.brand }}</p>
+            <p>Model: {{ car.model }}</p>
+            <p>Year: {{ car.year }}</p>
+            <p>Price Per Day: $<span id="price-per-day">{{ car.price_per_day }}</span></p>
+            <p>Description: {{ car.description }}</p>
+        </div>
+        
+        <div class="col s6">
+            <form action="{% url 'add_booking' car.id %}" method="POST">
+                {% csrf_token %}
+                <!-- Render the inputs -->
+                {{ booking_form.as_p }}
+                <input type="submit" class="btn" value="Book!">
+            </form>
+            <button id="calculate">Calculate Price</button>
+            <p>{{ error_msg }}</p>
+            <p id="total_price"></p>
+        </div>
+    </div>
 </div>
-
-
-
-
-
-<script>
-    const startDateEl = document.getElementById('id_trip_start');
+    
+    
+    
+    
+    
+    <script>
+        const startDateEl = document.getElementById('id_trip_start');
     const endDateEl = document.getElementById('id_trip_end');
     const totalPriceEl = document.getElementById('total_price');
     const pricePerDayEl = document.getElementById('price-per-day');
