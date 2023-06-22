@@ -23,6 +23,7 @@ def cars_index(request):
     return render(request, 'cars/index.html', {'cars': cars})
 
 
+@login_required
 def bookings_index(request):
     bookings = Booking.objects.filter(user=request.user)
     past_bookings = []
@@ -48,6 +49,7 @@ def cars_detail(request, car_id):
     })
 
 
+@login_required
 def add_booking(request, car_id):
     car = Car.objects.get(id=car_id)
     booking_form = BookingForm()
@@ -81,12 +83,12 @@ def add_booking(request, car_id):
                   {'car': car, 'booking_form': booking_form, 'error_msg': error_msg})
 
 
-class BookingUpdate(UpdateView):
+class BookingUpdate(LoginRequiredMixin, UpdateView):
     model = Booking
     fields = ['trip_start', 'trip_end']
 
 
-class BookingDelete (DeleteView):
+class BookingDelete (LoginRequiredMixin, DeleteView):
     model = Booking
     success_url = '/bookings'
 

@@ -22,7 +22,7 @@
     <p>Brand: {{ car.brand }}</p>
     <p>Model: {{ car.model }}</p>
     <p>Year: {{ car.year }}</p>
-    <p>Price Per Day: ${{ car.price_per_day }}</p>
+    <p>Price Per Day: $<span id="price-per-day">{{ car.price_per_day }}</span></p>
     <p>Description: {{ car.description }}</p>
 </div>
 
@@ -33,7 +33,9 @@
         {{ booking_form.as_p }}
         <input type="submit" class="btn" value="Book!">
     </form>
+    <button id="calculate">How Much?</button>
     <p>{{ error_msg }}</p>
+    <p id="total_price"></p>
 </div>
 
 
@@ -43,6 +45,9 @@
 <script>
     const startDateEl = document.getElementById('id_trip_start');
     const endDateEl = document.getElementById('id_trip_end');
+    const totalPriceEl = document.getElementById('total_price');
+    const pricePerDayEl = document.getElementById('price-per-day');
+    const calculateEl = document.getElementById('calculate');
     // M is Materialize's global variable
     M.Datepicker.init(startDateEl, {
         format: 'yyyy-mm-dd',
@@ -55,6 +60,16 @@
         defaultDate: new Date(),
         setDefaultDate: true,
         autoClose: true
+    });
+    
+    calculateEl.addEventListener('click', function() {
+        const startDate = new Date(startDateEl.value);
+        const endDate = new Date(endDateEl.value);
+        const timeDiff = endDate.getTime() - startDate.getTime();
+        const dayDiff = timeDiff / (1000 * 3600 * 24);
+        const totalPrice = dayDiff * parseInt(pricePerDayEl.textContent);
+        console.log(dayDiff);
+        totalPriceEl.innerText = `Total Price: $${totalPrice}`;
     });
 </script>
 
