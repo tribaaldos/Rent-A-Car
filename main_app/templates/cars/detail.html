@@ -1,72 +1,92 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Car Details</h1>
-
-<div>
-    <p>Brand: {{ car.brand }}</p>
-    <p>Model: {{ car.model }}</p>
-    <p>Year: {{ car.year }}</p>
-    <p>Price Per Day: ${{ car.price_per_day }}</p>
-    <p>Description: {{ car.description }}</p>
-</div>
-
-<div class="col s6">
-    <form action="{% url 'add_booking' car.id %}" method="POST">
+<div class="fake-body">
+    <h1>Car Details</h1>
+    
+    <div class="detail-pic-container">
+        {% for photo in car.photo_set.all %}
+        <img style="height: 700px;"class="responsive-img card-panel" class="detail-pic" src="{{photo.url}}">
+        {% empty %}
+        <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        {% endfor %}
+    </div>
+    
+    <form action="{% url 'add_photo' car.id %}" enctype="multipart/form-data" method="POST" >
         {% csrf_token %}
-        <!-- Render the inputs -->
-        {{ booking_form.as_p }}
-        <input type="submit" class="btn" value="Book!">
+        {% if request.user.is_superuser %}
+        <input type="file" name="photo-file">
+        <button type="submit" class="btn">Upload Photo</button>
+        {% endif %}
+        <br><br>
     </form>
-
+    <div class="info-form-container">
+        <div class="car-info">
+            <p>Brand: {{ car.brand }}</p>
+            <p>Model: {{ car.model }}</p>
+            <p>Year: {{ car.year }}</p>
+            <p>Price Per Day: $<span id="price-per-day">{{ car.price_per_day }}</span></p>
+            <p>Description: {{ car.description }}</p>
+        </div>
+        
+        <div class="col s6">
+            <form action="{% url 'add_booking' car.id %}" method="POST">
+                {% csrf_token %}
+                <!-- Render the inputs -->
+                {{ booking_form.as_p }}
+                <input type="submit" class="btn" value="Book!">
+            </form>
+            <button id="calculate">Calculate Price</button>
+            <p>{{ error_msg }}</p>
+            <p id="total_price"></p>
+        </div>
+    </div>
 </div>
-<p>{{ error_msg }}</p>
-
-<!-- Review/Comment Section -->
+    
 <div>
-    <h2>Leave a Review</h2>
-      <div>
-        <label for="comment">Comment:</label>
-        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-      </div>
-      <div>
-        <label for="rating">Rating:</label>
-        <select id="rating" name="rating">
-          <option value="1">1 Star</option>
-          <option value="2">2 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="5">5 Stars</option>
-        </select>
-      </div>
-      <form action="{% url 'add_review' car_id=car.id %}" method="POST">
-        {% csrf_token %}
-        {{ review_form.as_p }}
-        <input type="hidden" name="car_id" value="{{ car.id }}">
-        <button type="submit">Submit Review</button>
-      </form>
-  </div>
-  
-  <!-- Display Existing Reviews -->
-  
-  <div>
-    <h2>Reviews</h2>
-    <ul>
-      {% for review in reviews %}
-        <li>
-          <p> {{ review.content }}</p>
-          <p>Rating: {{ review.rating }} ⭐</p>
-          <p>User: {{ review.user.username }}</p>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-
-
-
-<script>
+  <h2>Leave a Review</h2>
+    <div>
+      <label for=“comment”>Comment:</label>
+      <textarea id=“comment” name=“comment” rows=“4" cols=“50”></textarea>
+    </div>
+    <div>
+      <label for=“rating”>Rating:</label>
+      <select id=“rating” name=“rating”>
+        <option value=“1”>1 Star</option>
+        <option value=“2">2 Stars</option>
+        <option value=“3”>3 Stars</option>
+        <option value=“4">4 Stars</option>
+        <option value=“5”>5 Stars</option>
+      </select>
+    </div>
+    <form action=“{% url ‘add_review’ car_id=car.id %}” method=“POST”>
+      {% csrf_token %}
+      {{ review_form.as_p }}
+      <input type=“hidden” name=“car_id” value=“{{ car.id }}“>
+      <button type=“submit”>Submit Review</button>
+    </form>
+</div>
+<!-- Display Existing Reviews -->
+<div>
+  <h2>Reviews</h2>
+  <ul>
+    {% for review in reviews %}
+      <li>
+        <p> {{ review.content }}</p>
+        <p>Rating: {{ review.rating }} :star:</p>
+        <p>User: {{ review.user.username }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+    
+    
+    
+    <script>
     const startDateEl = document.getElementById('id_trip_start');
     const endDateEl = document.getElementById('id_trip_end');
+    const totalPriceEl = document.getElementById('total_price');
+    const pricePerDayEl = document.getElementById('price-per-day');
+    const calculateEl = document.getElementById('calculate');
     // M is Materialize's global variable
     M.Datepicker.init(startDateEl, {
         format: 'yyyy-mm-dd',
@@ -79,6 +99,16 @@
         defaultDate: new Date(),
         setDefaultDate: true,
         autoClose: true
+    });
+    
+    calculateEl.addEventListener('click', function() {
+        const startDate = new Date(startDateEl.value);
+        const endDate = new Date(endDateEl.value);
+        const timeDiff = endDate.getTime() - startDate.getTime();
+        const dayDiff = timeDiff / (1000 * 3600 * 24);
+        const totalPrice = dayDiff * parseInt(pricePerDayEl.textContent);
+        console.log(dayDiff);
+        totalPriceEl.innerText = `Total Price: $${totalPrice}`;
     });
 </script>
 
