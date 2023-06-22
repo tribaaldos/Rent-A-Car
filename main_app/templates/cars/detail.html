@@ -17,9 +17,49 @@
         {{ booking_form.as_p }}
         <input type="submit" class="btn" value="Book!">
     </form>
-    <p>{{ error_msg }}</p>
-</div>
 
+</div>
+<p>{{ error_msg }}</p>
+
+<!-- Review/Comment Section -->
+<div>
+    <h2>Leave a Review</h2>
+      <div>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+      </div>
+      <div>
+        <label for="rating">Rating:</label>
+        <select id="rating" name="rating">
+          <option value="1">1 Star</option>
+          <option value="2">2 Stars</option>
+          <option value="3">3 Stars</option>
+          <option value="4">4 Stars</option>
+          <option value="5">5 Stars</option>
+        </select>
+      </div>
+      <form action="{% url 'add_review' car_id=car.id %}" method="POST">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <input type="hidden" name="car_id" value="{{ car.id }}">
+        <button type="submit">Submit Review</button>
+      </form>
+  </div>
+  
+  <!-- Display Existing Reviews -->
+  
+  <div>
+    <h2>Reviews</h2>
+    <ul>
+      {% for review in reviews %}
+        <li>
+          <p> {{ review.content }}</p>
+          <p>Rating: {{ review.rating }}</p>
+          <p>User: {{ review.user.username }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 
 
 

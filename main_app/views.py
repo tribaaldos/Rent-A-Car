@@ -7,9 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import DeleteView, UpdateView
-from .models import Car, Booking, Photo
-from .forms import BookingForm
+from .models import Car, Booking, Photo, Review
+from .forms import BookingForm, ReviewForm
 from datetime import date, datetime
+
 
 # Create your views here.
 
@@ -40,11 +41,11 @@ def bookings_index(request):
 
 def cars_detail(request, car_id):
     car = Car.objects.get(id=car_id)
-
+    reviews = Review.objects.filter(car=car)
     booking_form = BookingForm()
-
+     
     return render(request, 'cars/detail.html', {
-        'car': car, 'booking_form': booking_form, 'is_valid_date': True
+        'car': car, 'booking_form': booking_form, 'reviews': reviews, 'is_valid_date': True
     })
 
 
@@ -126,3 +127,20 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+
+def add_review(request, car_id):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review_form = ReviewForm()
+        if form.is_valid():
+            new_review = form.save(commit=False)
+            new_review.user = request.user
+            new_review.car_id = car_id
+            new_review.save()
+            return redirect('detail', car_id=car_id)
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'add_review.html', {'form': form})
+
