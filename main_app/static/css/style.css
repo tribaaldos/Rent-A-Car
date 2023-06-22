@@ -1,3 +1,11 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  
+}
+
 .nav-wrapper {
   background-color: black;
   font-size: 10px;
@@ -8,6 +16,7 @@
   border: 2px solid grey;
   padding: 10px;
   margin-bottom: 10px;
+  width: 700px;
 }
 .booking-card {
   background-color: beige;
@@ -68,3 +77,19 @@
   padding: 10px;
 }
 
+.home {
+  background-image: url(https://d2v1gjawtegg5z.cloudfront.net/uploads/files/000/447/345/original/photo_of_new_Toyota_model_lineup.jpg?1682544979);
+  background-size: cover;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#cars-container {
+  display: flex;
+  flex-direction: row;
+}
