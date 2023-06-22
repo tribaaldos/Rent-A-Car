@@ -22,7 +22,7 @@
     <p>Brand: {{ car.brand }}</p>
     <p>Model: {{ car.model }}</p>
     <p>Year: {{ car.year }}</p>
-    <p>Price Per Day: ${{ car.price_per_day }}</p>
+    <p>Price Per Day: <span id="price-per-day">${{ car.price_per_day }}</span></p>
     <p>Description: {{ car.description }}</p>
 </div>
 
@@ -34,6 +34,7 @@
         <input type="submit" class="btn" value="Book!">
     </form>
     <p>{{ error_msg }}</p>
+    <p id="total_price"></p>
 </div>
 
 
@@ -43,6 +44,8 @@
 <script>
     const startDateEl = document.getElementById('id_trip_start');
     const endDateEl = document.getElementById('id_trip_end');
+    const totalPriceEl = document.getElementById('total_price');
+    const pricePerDayEl = document.getElementById('price-per-day');
     // M is Materialize's global variable
     M.Datepicker.init(startDateEl, {
         format: 'yyyy-mm-dd',
@@ -56,6 +59,10 @@
         setDefaultDate: true,
         autoClose: true
     });
+
+    console.log(endDateEl.textContent - startDateEl.textContent);
+    const totalPrice = (endDateEl.textContent - startDateEl.textContent) * pricePerDayEl;
+    
 </script>
 
 {% endblock %}
